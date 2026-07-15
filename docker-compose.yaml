@@ -9,6 +9,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: iron_dome
     volumes:
+      - ./repository/database.sql:/docker-entrypoint-initdb.d/init.sql
       - mysql-data:/var/lib/mysql
 volumes:
   mysql-data:
