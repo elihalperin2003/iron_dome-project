@@ -11,8 +11,18 @@ function baseRepository(tableName) {
       : "";
     const [result] = await pool.execute(
       `SELECT * FROM ${tableName} ${conditions}`,
+      values,
     );
     return result;
+  }
+  async function insert(newLine) {
+    const values = Object.values(filter);
+    const keys = Object.keys(filter).join(", ");
+    const [result] = await pool.execute(
+      `INSERT INTO ${tableName} (${keys}) VALUES (${values.map((_) => "?").join(",")})`,
+      values,
+    );
+    return;
   }
 
   return { select };
