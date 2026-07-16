@@ -24,7 +24,7 @@ function baseRepository(tableName) {
       `INSERT INTO ${tableName} (${keys}) VALUES (${values.map((_) => "?").join(",")})`,
       values,
     );
-    return;
+    return result.insertId;
   }
   async function update(newData, filters) {
     const valuesFilters = filters ? Object.values(filters) : "";
@@ -50,3 +50,4 @@ function baseRepository(tableName) {
 
 export const operatorsBase = baseRepository("operators");
 export const incidentsBase = baseRepository("incidents");
+export const logsBase = baseRepository("logs");

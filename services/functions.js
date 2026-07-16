@@ -1,18 +1,33 @@
-import { operatorsBase, incidentsBase } from "../repository/baseRepository.js";
+import {
+  operatorsBase,
+  incidentsBase,
+  logsBase,
+} from "../repository/baseRepository.js";
 
 export async function createOperator(req, res) {
   const { name, rank } = req.body;
-  await operatorsBase.insert({ name, rank });
+  const insertId = await operatorsBase.insert({ name, rank });
+  await logsBase.insert({
+    action: "OPERATOR_CREATED",
+    operator_id: insertId,
+    description: "New operator created",
+  });
   return;
 }
 
 export async function createIncident(req, res) {
   const { code_name, threat_level, operator_id } = req.body;
-  await incidentsBase.insert({
+  const insertId = await incidentsBase.insert({
     code_name,
     threat_level,
     status: "OPEN",
     operator_id,
+  });
+  await logsBase.insert({
+    action: "INCIDENT_CREATED",
+    incident_id: insertId,
+    operator_id: operator_id,
+    description: "New incident created",
   });
   return;
 }
@@ -21,8 +36,19 @@ export async function updateIncident(req, res) {
   const { id } = req.params;
   const { status } = req.body;
   await incidentsBase.update({ status }, { id });
+  await logsBase.insert({
+    action: "INCIDENT_UPDATED",
+    incident_id: id,
+    description: "Incident updated",
+  });
+  return;
 }
 
 export async function getOpenIncidents(req, res) {
-  return await incidentsBase.select({ status: "OPEN" });
+  const result = await incidentsBase.select({ status: "OPEN" });
+  await logsBase.insert({
+    action: "OPEN_INCIDENTS_SHOWED",
+    description: "Show open incidents",
+  });
+  return result;
 }
