@@ -1,4 +1,4 @@
-import pool from "./db/database.js";
+import pool from "../db/database.js";
 
 function baseRepository(tableName) {
   async function select(filters) {
@@ -17,7 +17,9 @@ function baseRepository(tableName) {
   }
   async function insert(newLine) {
     const values = Object.values(newLine);
-    const keys = Object.keys(newLine).join(", ");
+    const keys = Object.keys(newLine)
+      .map((key) => `\`${key}\``)
+      .join(", ");
     const [result] = await pool.execute(
       `INSERT INTO ${tableName} (${keys}) VALUES (${values.map((_) => "?").join(",")})`,
       values,
@@ -45,3 +47,6 @@ function baseRepository(tableName) {
 
   return { select, insert, update };
 }
+
+export const operatorsBase = baseRepository("operators");
+export const incidentsBase = baseRepository("incidents");

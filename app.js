@@ -5,5 +5,11 @@ import incidentRoute from "./routes/incidentRoute.js";
 
 const app = express();
 
-app.route("/operators", operatorRouter);
-app.route("/incidents", incidentRoute);
+app.use(express.json());
+
+app.use("/operators", operatorRouter);
+app.use("/incidents", incidentRoute);
+
+app.listen(process.env.PORT, () =>
+  console.log(`listen to port ${process.env.PORT}`),
+);
