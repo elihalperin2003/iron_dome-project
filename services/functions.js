@@ -7,7 +7,6 @@ export async function createOperator(req, res) {
 }
 
 export async function createIncident(req, res) {
-  console.log(req.body);
   const { code_name, threat_level, operator_id } = req.body;
   await incidentsBase.insert({
     code_name,
@@ -16,4 +15,10 @@ export async function createIncident(req, res) {
     operator_id,
   });
   return;
+}
+
+export async function updateIncident(req, res) {
+  const { id } = req.params;
+  const { status } = req.body;
+  await incidentsBase.update({ status }, { id });
 }
