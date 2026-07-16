@@ -22,3 +22,7 @@ export async function updateIncident(req, res) {
   const { status } = req.body;
   await incidentsBase.update({ status }, { id });
 }
+
+export async function getOpenIncidents(req, res) {
+  return await incidentsBase.select({ status: "OPEN" });
+}
