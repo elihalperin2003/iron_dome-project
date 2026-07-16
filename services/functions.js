@@ -1,8 +1,19 @@
-import { operatorsBase } from "../repository/baseRepository.js";
+import { operatorsBase, incidentsBase } from "../repository/baseRepository.js";
 
 export async function createOperator(req, res) {
-  console.log(req.body);
   const { name, rank } = req.body;
   await operatorsBase.insert({ name, rank });
+  return;
+}
+
+export async function createIncident(req, res) {
+  console.log(req.body);
+  const { code_name, threat_level, operator_id } = req.body;
+  await incidentsBase.insert({
+    code_name,
+    threat_level,
+    status: "OPEN",
+    operator_id,
+  });
   return;
 }
