@@ -14,24 +14,36 @@ import {
 
 const router = express.Router();
 
-router.post("", isOperatorExists, async (req, res) => {
-  await createIncident(req, res);
-  await res.json({ message: "incident created!" });
+router.post("", isOperatorExists, async (req, res, next) => {
+  try {
+    await createIncident(req, res);
+    res.json({ message: "incident created!" });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.patch(
   "/:id/status",
   isIncidentExists,
   isStatusCorrect,
-  async (req, res) => {
-    await updateIncident(req, res);
-    await res.json({ message: "incident updated!" });
+  async (req, res, next) => {
+    try {
+      await updateIncident(req, res);
+      res.json({ message: "incident updated!" });
+    } catch (error) {
+      next(error);
+    }
   },
 );
 
-router.get("/open", async (req, res) => {
-  const result = await getOpenIncidents(req, res);
-  await res.json({ message: result });
+router.get("/open", async (req, res, next) => {
+  try {
+    const result = await getOpenIncidents(req, res);
+    res.json({ message: result });
+  } catch (error) {
+    next(error);
+  }
 });
 
 export default router;
