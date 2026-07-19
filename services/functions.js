@@ -36,9 +36,11 @@ export async function updateIncident(req, res) {
   const { id } = req.params;
   const { status } = req.body;
   await incidentsBase.update({ status }, { id });
+  const [incident] = await incidentsBase.select({ id });
   await logsBase.insert({
     action: "INCIDENT_UPDATED",
     incident_id: id,
+    operator_id: incident.operator_id,
     description: "Incident updated",
   });
   return;
