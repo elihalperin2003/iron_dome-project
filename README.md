@@ -15,7 +15,9 @@ DB_NAME=iron_dome
 
 הרצת הפרויקט
 
+```
 npm i express mysql2
 docker compose up -d
 docker exec -it iron-dome-db mysql -uroot -proot
 npm start
+```
